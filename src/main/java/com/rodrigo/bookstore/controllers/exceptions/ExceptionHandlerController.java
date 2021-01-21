@@ -1,6 +1,5 @@
 package com.rodrigo.bookstore.controllers.exceptions;
 
-import java.util.Arrays;
 import java.util.stream.Collectors;
 
 import javax.servlet.ServletRequest;
@@ -18,7 +17,7 @@ import com.rodrigo.bookstore.services.exceptions.ObjectNotFoundException;
 public class ExceptionHandlerController {
 	@ExceptionHandler(ObjectNotFoundException.class)
 	public ResponseEntity<StandardError> objectNotFoundException(ObjectNotFoundException e, ServletRequest request) {
-		StandardError error = new StandardError(HttpStatus.NOT_FOUND.value(), Arrays.asList(e.getMessage()),
+		StandardError error = new StandardError(HttpStatus.NOT_FOUND.value(), e.getMessage(),
 				System.currentTimeMillis());
 
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
@@ -27,7 +26,7 @@ public class ExceptionHandlerController {
 	@ExceptionHandler(DataIntegrityViolationException.class)
 	public ResponseEntity<StandardError> dataIntegrityViolationException(DataIntegrityViolationException e,
 			ServletRequest request) {
-		StandardError error = new StandardError(HttpStatus.BAD_REQUEST.value(), Arrays.asList(e.getMessage()),
+		StandardError error = new StandardError(HttpStatus.BAD_REQUEST.value(), e.getMessage(),
 				System.currentTimeMillis());
 
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
@@ -35,10 +34,10 @@ public class ExceptionHandlerController {
 	
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<StandardError> methodArgumentNotValidException(MethodArgumentNotValidException e, ServletRequest request) {
-		StandardError error = new StandardError(HttpStatus.BAD_REQUEST.value(), null,
+		ValidationError error = new ValidationError(HttpStatus.BAD_REQUEST.value(), "Error on validating the fields",
 				System.currentTimeMillis());
 		
-		error.setMessages(e.getAllErrors().stream().map(x -> x.getDefaultMessage()).collect(Collectors.toList()));
+		error.setErrors(e.getAllErrors().stream().map(x -> x.getDefaultMessage()).collect(Collectors.toList()));
 
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
 	}

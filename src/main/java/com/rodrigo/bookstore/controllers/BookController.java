@@ -4,6 +4,8 @@ import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,7 +30,7 @@ public class BookController {
 	private BookService bookService;
 	
 	@PostMapping
-	public ResponseEntity<BookDTO> save(@RequestParam(value = "category", defaultValue = "0") Integer categoryId, @RequestBody Book book) {
+	public ResponseEntity<BookDTO> save(@RequestParam(value = "category", defaultValue = "0") Integer categoryId, @Valid @RequestBody Book book) {
 		BookDTO bookDto = new BookDTO(bookService.create(book, categoryId));
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(bookDto.getId()).toUri();
 		
@@ -67,7 +69,7 @@ public class BookController {
 	}
 	
 	@PutMapping(value = "/{id}")
-	public ResponseEntity<BookDTO> replace(@PathVariable Integer id, @RequestParam  Book book) {
+	public ResponseEntity<BookDTO> replace(@PathVariable Integer id, @Valid @RequestParam  Book book) {
 		Book replacedBook = bookService.replace(id, book);
 		BookDTO bookDto = new BookDTO(replacedBook);
 		

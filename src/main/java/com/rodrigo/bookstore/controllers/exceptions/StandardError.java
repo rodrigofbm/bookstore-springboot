@@ -1,19 +1,17 @@
 package com.rodrigo.bookstore.controllers.exceptions;
 
-import java.util.List;
-
 public class StandardError {
 	private Integer status;
-	private List<String> messages;
+	private String message;
 	private Long timestamp;
 	
 	public StandardError() {
 		super();
 	}
 
-	public StandardError(Integer status, List<String> messages, Long timestamp) {
+	public StandardError(Integer status, String message, Long timestamp) {
 		this.status = status;
-		this.messages = messages;
+		this.message = message;
 		this.timestamp = timestamp;
 	}
 
@@ -25,12 +23,12 @@ public class StandardError {
 		this.status = status;
 	}
 
-	public List<String> getMessages() {
-		return messages;
+	public String getMessage() {
+		return message;
 	}
 
-	public void setMessages(List<String> messages) {
-		this.messages = messages;
+	public void setMessage(String message) {
+		this.message = message;
 	}
 
 	public Long getTimestamp() {
